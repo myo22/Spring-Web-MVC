@@ -22,4 +22,6 @@ public interface TodoMapper {  //XML을 작성할 때 namespace의 값은 인터
 
     List<TodoVO> selectList(PageRequestDTO pageRequestDTO);
 
+    int getCount(PageRequestDTO pageRequestDTO);
+
 }

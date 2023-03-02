@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.zerock.review3.dto.PageRequestDTO;
 import org.zerock.review3.dto.TodoDTO;
 import org.zerock.review3.service.TodoService;
 
@@ -24,18 +25,29 @@ public class TodoController {
 
     private final TodoService todoService;
 
+    /*
     @RequestMapping("/list")
     public void list(Model model){
         log.info("todo list.........");
-
-        /*
         List<TodoDTO> dtoList = todoService.getAll(); 한번 같은 원리로 해봤는데 효율이 안나오는게 어차피 TodoService에서 return을 매핑하고 dto로 보내주기때문에
         model.addAttribute("dtoList", dtoList);       두번 반복해서 낭비할 이유가 없다.
-        */
 
         model.addAttribute("dtoList", todoService.getAll()); //model에 dtoList라는 이름으로 목록 데이터를 담았다.(JSP에서는 JSTL을 이용해서 목록을 출렵합니다.)
                                                                          //list.jsp처럼 view에서 dtoList를 이용해서 활용가능하다.
     }
+    */
+
+    @GetMapping("/list")
+    public void list(@Valid PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model){
+
+        log.info(pageRequestDTO);
+
+        if(bindingResult.hasErrors()){  //@Valid를 이용해서 잘못된 파라미터 값들이 들어오는 경우 page는 1, size는 10 으로 고정된 값으로 구성한다.
+            pageRequestDTO = PageRequestDTO.builder().build();
+        }
+        model.addAttribute("responseDTO", todoService.getList(pageRequestDTO));
+    }
+
 
     //@RequestMapping(value = "/register", method = RequestMethod.GET) //원래는 method로 GET/POST 방식을 구분해야 하지만 이젠 GetMapping @PostMapping 어노테이션 추가로 처리할 수 있다.
     @GetMapping("/register")

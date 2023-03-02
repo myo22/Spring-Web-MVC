@@ -57,7 +57,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${dtoList}" var="dto">
+                            <c:forEach items="${responseDTO.dtoList}" var="dto">
                                 <tr>
                                     <th scope="row"><c:out value="${dto.tno}"/></th>
                                     <td>
@@ -72,12 +72,50 @@
                             </c:forEach>
                             </tbody>
                         </table>
+
+                        <div class="float-end">
+                            <ul class="pagination flex-wrap">
+                                <c:if test="${responseDTO.prev}">
+                                    <li class="page-item">
+                                        <a class="page-link" data-num="${responseDTO.start - 1}">Previous</a>
+                                    </li>
+                                </c:if>
+
+                                <c:forEach begin="${responseDTO.start}" end ="${responseDTO.end}" var="num">
+                                    <li class="page-item ${responseDTO.page == num? "active":""} ">
+                                        <a class="page-link" data-num="${num}">${num} </a>
+                                    </li>
+                                </c:forEach>
+
+                                <c:if test="${responseDTO.next}">
+                                    <li class="page-item">
+                                        <a class="page-link" data-num="${responseDTO.end + 1}">Next</a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </div>
+
+                        <script>
+
+                            document.querySelector(".pagination").addEventListener("click", function (e) {
+                                e.preventDefault()
+                                e.stopPropagation()
+
+                                const target = e.target
+
+                                if (target.tagName !== 'A') { //<a> 태그를 클릭했을 때만 data-num 속성값을 읽어와서 현재 주소(self.location)를 변경하는 방식으로 작성
+                                    return
+                                }
+                                const num = target.getAttribute("data-num") //위에서 'data-' 속성을 이용해서 필요한 속성을 추가한걸 여기서 쓰는 것이다.
+
+                                self.location = `/todo/list?page=\${num}` //백틱(' ')를 이용해서 템플릿 처리 Why? 문자열 결합에 '+'를 이용해야 하는 불편함 줄임 대신 JSP의 EL이 아니라는 것을 표시하기 위해서 '\${}'로 처리}
+                            },false)
+
+                        </script>
+
                     </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="row content">
-    </div>
 
     <div class="row footer">
         <!--<h1>Footer</h1>-->
@@ -89,6 +127,7 @@
         </div>
 
     </div>
+
 </div>
 
 

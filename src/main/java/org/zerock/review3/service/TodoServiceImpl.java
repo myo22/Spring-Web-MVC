@@ -5,6 +5,8 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.zerock.review3.domain.TodoVO;
+import org.zerock.review3.dto.PageRequestDTO;
+import org.zerock.review3.dto.PageResponseDTO;
 import org.zerock.review3.dto.TodoDTO;
 import org.zerock.review3.mapper.TodoMapper;
 
@@ -32,14 +34,31 @@ public class TodoServiceImpl implements TodoService{
         todoMapper.insert(todoVO);
     }
 
+//    @Override
+//    public List<TodoDTO> getAll(){
+//        List<TodoDTO> dtoList = todoMapper.selectAll().stream() //TodoMapper가 반환하는 데이터 타입이 List<TodoVO>이기 때문에 이를 List<TodoDTO>로 변환하는 작업이 필요.
+//                .map(vo -> modelMapper.map(vo, TodoDTO.class))
+//                .collect(Collectors.toList()); //collect()를 이용해서 List<TodoDTO>로 묶어줍니다.
+//        return dtoList;
+//    }
+
     @Override
-    public List<TodoDTO> getAll(){
+    public PageResponseDTO<TodoDTO> getList(PageRequestDTO pageRequestDTO){
 
-        List<TodoDTO> dtoList = todoMapper.selectAll().stream() //TodoMapper가 반환하는 데이터 타입이 List<TodoVO>이기 때문에 이를 List<TodoDTO>로 변환하는 작업이 필요.
+        List<TodoVO> voList = todoMapper.selectList(pageRequestDTO);
+        List<TodoDTO> dtoList = voList.stream()
                 .map(vo -> modelMapper.map(vo, TodoDTO.class))
-                .collect(Collectors.toList()); //collect()를 이용해서 List<TodoDTO>로 묶어줍니다.
+                .collect(Collectors.toList());
 
-        return dtoList;
+        int total = todoMapper.getCount(pageRequestDTO);
+
+        PageResponseDTO<TodoDTO> pageResponseDTO = PageResponseDTO.<TodoDTO>withAll()
+                .dtoList(dtoList)
+                .total(total)
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+
+        return  pageResponseDTO;
     }
 
     @Override

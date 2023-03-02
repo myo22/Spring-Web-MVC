@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.zerock.review3.dto.PageRequestDTO;
+import org.zerock.review3.dto.PageResponseDTO;
 import org.zerock.review3.dto.TodoDTO;
 import org.zerock.review3.service.TodoService;
 
@@ -30,6 +32,18 @@ public class TodoServiceTests {
                 .build();
 
         todoService.register(todoDTO);
+    }
+
+    @Test
+    public void testPaging(){
+
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
+
+        PageResponseDTO<TodoDTO> responseDTO = todoService.getList(pageRequestDTO);
+
+        log.info(responseDTO);
+
+        responseDTO.getDtoList().stream().forEach(todoDTO -> log.info(todoDTO));
     }
 
 }

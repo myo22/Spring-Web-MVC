@@ -88,12 +88,12 @@
 
                         <script>
                             document.querySelector(".btn-primary").addEventListener("click", function(e){
-                                self.location = "/todo/modify?tno="+${dto.tno}
+                                self.location = "/todo/modify?tno=${dto.tno}&${pageRequestDTO.link}"
                             },false)
 
 
                             document.querySelector(".btn-secondary").addEventListener("click", function(e){
-                                 self.location = "/todo/list";
+                                 self.location = "/todo/list?${pageRequestDTO.link}" //여길 pageRequestDTO.link로 바꿔주면서 다시 list로 돌아갈때 같은 페이지가 나오게 만든것이다.
                             },false)
                         </script>
 

@@ -23,7 +23,19 @@ public class PageRequestDTO {  //select * from tbl_todo order by tno desc limit 
     @Positive
     private int size = 10;
 
+    public String link;
+
     public int getSkip(){ //#{skip}의 경우는 getSkip()을 호출하게 됩니다. Why? MyBatis는 기본적으로 getXXX, setXXX를 통해서 동작하기 때문에.
         return (page -1) * 10;
+    }
+
+    public String getLink() { //페이지 이동에 필요한 링크들을 생성합니다.
+        if(link == null){
+            StringBuilder builder = new StringBuilder(); // StringBuilder는 String과 문자열을 더할때 새로운 객체가 생성하는 것이 아니라 기존에 데이터에 더하는 방식을 사용하기 때문에 속도도 빠르고 상대적으로 부하가 적다.
+            builder.append("page=" + this.page);
+            builder.append("&size=" + this.size);
+            link = builder.toString();
+        }
+        return link;
     }
 }

@@ -136,7 +136,7 @@ public class TodoController {
         redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
         redirectAttributes.addAttribute("size", pageRequestDTO.getSize());
 
-        return "redirect:/todo/list";
+        return "redirect:/todo/read";
     }
 
 }

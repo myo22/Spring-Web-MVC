@@ -133,8 +133,10 @@ public class TodoController {
 
         todoService.modify(todoDTO);
 
-        redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
-        redirectAttributes.addAttribute("size", pageRequestDTO.getSize());
+        //redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
+        //redirectAttributes.addAttribute("size", pageRequestDTO.getSize());
+
+        redirectAttributes.addAttribute("tno", todoDTO.getTno());
 
         return "redirect:/todo/read";
     }

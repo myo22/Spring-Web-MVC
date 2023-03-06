@@ -38,6 +38,41 @@
         <!-- header end -->
         <!-- 기존의 <h1>Header</h1>끝 -->
 
+        <!-- 추가하는 코드 -->
+        <div class="row content">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Search </h5>
+                        <form action="/todo/list" method="get">
+                            <input type="hidden" name="size" value="${pageRequestDTO.size}">
+                            <div class="mb-3">
+                                <input type="checkbox" name="finished" ${pageRequestDTO.finished?"checked":""} >완료여부
+                            </div>
+                            <div class="mb-3">
+                                <input type="checkbox" name="types" value="t" ${pageRequestDTO.checkType("t")?"checked":""}>제목
+                                <input type="checkbox" name="types" value="w"  ${pageRequestDTO.checkType("w")?"checked":""}>작성자
+                                <input type="text"  name="keyword" class="form-control" value ='<c:out value="${pageRequestDTO.keyword}"/>' >
+                            </div>
+                            <div class="input-group mb-3 dueDateDiv">
+                                <input type="date" name="from" class="form-control" value="${pageRequestDTO.from}">
+                                <input type="date" name="to" class="form-control"  value="${pageRequestDTO.to}">
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="float-end">
+                                    <button class="btn btn-primary" type="submit">Search</button>
+                                    <button class="btn btn-info clearBtn" type="reset">Clear</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!--기존의코드-->
         <div class="row content">
             <div class="col">
                 <div class="card">
@@ -97,6 +132,20 @@
 
                         <script>
 
+                            /* document.querySelector(".pagination").addEventListener("click", function (e) {
+                                e.preventDefault()
+                                e.stopPropagation()
+
+                                const target = e.target
+
+                                if(target.tagName !== 'A') { //<a> 태그를 클릭했을 때만 data-num 속성값을 읽어와서 현재 주소(self.location)를 변경하는 방식으로 작성
+                                    return
+                                }
+                                const num = target.getAttribute("data-num") //위에서 'data-' 속성을 이용해서 필요한 속성을 추가한걸 여기서 쓰는 것이다.
+
+                                self.location = `/todo/list?page=\${num}` //백틱(` `)을 이용해서 템플릿 처리
+                            },false)*/
+
                             document.querySelector(".pagination").addEventListener("click", function (e) {
                                 e.preventDefault()
                                 e.stopPropagation()
@@ -108,7 +157,20 @@
                                 }
                                 const num = target.getAttribute("data-num") //위에서 'data-' 속성을 이용해서 필요한 속성을 추가한걸 여기서 쓰는 것이다.
 
-                                self.location = `/todo/list?page=\${num}` //백틱(' ')를 이용해서 템플릿 처리 Why? 문자열 결합에 '+'를 이용해야 하는 불편함 줄임 대신 JSP의 EL이 아니라는 것을 표시하기 위해서 '\${}'로 처리}
+                                const formObj = document.querySelector("form")
+
+                                formObj.innerHTML += `<input type='hidden' name='page' value='\${num}'>` //이 HTML 요소에 접근하여 [홍길동]을 [이순신]으로 바꿔 출력하게 만들려면 이 속성을 사용해야 한다.
+
+                                formObj.submit();
+
+                            },false)
+
+
+                            document.querySelector(".clearBtn").addEventListener("click", function (e){ //clear 버튼 클릭 이벤트
+                                e.preventDefault()
+                                e.stopPropagation()
+
+                                self.location ='/todo/list'
                             },false)
 
                         </script>

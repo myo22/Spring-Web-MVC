@@ -28,11 +28,47 @@
         update tbl_todo set title = #{title}, dueDate = #{dueDate}, finished = #{finished} where tno = #{tno}
     </update>
 
-    <select id="selectList" resultType="org.zerock.review3.domain.TodoVO">
-        select * from tbl_todo order by tno desc limit #{skip}, #{size}
+    <!--    <select id="selectList" resultType="org.zerock.springex.domain.TodoVO">-->
+    <!--        select * from tbl_todo order by tno desc limit #{skip}, #{size}-->
+    <!--    </select>-->
+
+    <select id="selectList" resultType="org.zerock.springex.domain.TodoVO">
+        select * from tbl_todo
+        <include refid="search"></include> <!-- 동적 쿼리 부분을 <sql>로 분리하고 동일하게 적용될 부분은 <include>를 이용하여 작성한다 !-->
+        order by tno desc limit #{skip}, #{size}
     </select>
+
+
+    <sql id="search">
+        <where>
+            <if test="types != null and types.length > 0">
+                <foreach collection="types" item="type" open="(" close=") " separator=" OR ">
+                    <if test="type == 't'.toString()">
+                        title like concat('%', #{keyword}, '%')
+                    </if>
+                    <if test="type == 'w'.toString()">
+                        writer like concat('%', #{keyword}, '%')
+                    </if>
+                </foreach>
+            </if>
+
+            <if test="finished">
+                <trim prefix="and">
+                    finished = 1
+                </trim>
+            </if>
+
+            <if test="from != null and to != null">
+                <trim prefix="and">
+                    dueDate between  #{from} and #{to}
+                </trim>
+            </if>
+        </where>
+    </sql>
 
     <select id="getCount" resultType="int">
         select count(tno) from tbl_todo
+        <include refid="search"></include>
     </select>
+
 </mapper>

@@ -106,12 +106,14 @@ public class TodoController {
 
         todoService.remove(tno);
 
+        /*
         redirectAttributes.addAttribute("page", 1); //이건 삭제한거니까 size만 알려주고 페이지는 초기화시켜준다.
         redirectAttributes.addAttribute("size", pageRequestDTO.getSize());
-
-        //return "redirect:/todo/list?" + pageRequestDTO.getLink(); 위에 두개 지우고 이거 한줄로도 가능하다.
-
         return "redirect:/todo/list";
+        */
+
+        return "redirect:/todo/list?" + pageRequestDTO.getLink(); //위에 세개 지우고 이거 한줄로도 가능하다. 부가로 이건 이제 검색조건 필터까지 추가한것.
+
     }
 
     @PostMapping("/modify")

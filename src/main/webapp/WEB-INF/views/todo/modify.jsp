@@ -49,8 +49,10 @@
                     <div class="card-body">
                         <form action="/todo/modify" method="post">
 
-                            <input type="hidden" name="page" value="${pageRequestDTO.page}">
-                            <input type="hidden" name="size" value="${pageRequestDTO.size}">
+                            <!--
+                            <input type="hidden" name="page" value="${pageRequestDTO.page}"> 검색/필터링 기능이 추가되면 Todo의 내용이 수정되면서 검색/필터링 조건에 맞지 않게 될 수 있기 때문에 검색/필터링 조건을 유지하지 않아야 하므로 삭제합니다.
+                            <input type="hidden" name="size" value="${pageRequestDTO.size}"> 예를들어 검색/필터링에 날짜로 검색했는데 수정하면서 조건에 맞지 않게 되거나, 제목을 수정하면서 검색/필터링 조건에 맞지 않을 수도 있습니다. 따라서 수정한 후 조회 페이지로 이동하게 시킨다.
+                            -->
 
 
                             <div class="input-group mb-3">
@@ -118,7 +120,9 @@
                              e.preventDefault() //e.preventDefault는 고유 동작을 중단시키고
                              e.stopPropagation() //e.stopPropagation 는 상위 엘리먼트들로의 이벤트 전파를 중단시킨다.
 
-                             formObj.action ="/todo/remove"
+                            // formObj.action ="/todo/remove"
+
+                             formObj.action =`/todo/remove?${pageRequestDTO.link}` //백틱(`)으로 템플릿 리터럴을 사용하면, 줄바꿈 등을 쉽게 표현할 수 있다.
                              formObj.method ="post"
 
                              formObj.submit()
@@ -138,12 +142,21 @@
 
                         },false);
 
+                        /*document.querySelector(".btn-secondary").addEventListener("click",function(e) {
+
+                            e.preventDefault()
+                            e.stopPropagation()
+
+                            self.location = "/todo/list";
+
+                        },false);*/
+
                         document.querySelector(".btn-secondary").addEventListener("click",function(e) {
 
                             e.preventDefault()
                             e.stopPropagation()
 
-                            self.location = "/todo/list?${pageRequestDTO.link}";
+                            self.location= `/todo/list?${pageRequestDTO.link}`
 
                         },false);
 
